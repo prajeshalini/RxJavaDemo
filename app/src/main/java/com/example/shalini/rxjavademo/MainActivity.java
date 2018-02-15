@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.shalini.rxjavademo.data.source.remote.AllDogsAPI;
 import com.example.shalini.rxjavademo.data.source.remote.AuthorDetails;
@@ -19,15 +20,17 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private Button mNewtorkCallButton;
-    public static final boolean FETCH_REMOTE_DATA = true;
+    public static final boolean FETCH_REMOTE_DATA = false;
     private RemoteDataSource remoteDataSource;
     private AllDogsAPI mAllDogsBreedAPi;
+    private TextView mtextview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNewtorkCallButton = findViewById(R.id.button_network_call);
+        mtextview = findViewById(R.id.textview);
         remoteDataSource = RemoteDataSource.getInstance();
 
 
@@ -53,43 +56,16 @@ public class MainActivity extends AppCompatActivity {
                     observable.subscribe((authorDetails -> {
 //                        for (String breed :
 //                                dogsBreedList.dogsnameList) {
-                            Log.e("RXJAVA", authorDetails.getAuthor() + authorDetails.getContact() + authorDetails.getDocs() + authorDetails.getHome());
+                        mtextview.setText(""+authorDetails.getAuthor() + authorDetails.getContact() + authorDetails.getDocs() + authorDetails.getHome());
+                            Log.e("RXJAVA", authorDetails.getAuthor() +
+                                    authorDetails.getContact() +
+                                    authorDetails.getDocs() + authorDetails.getHome());
                         //}
                     }));
 
                 }
             }
         });
-//        // Observable
-//        Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5)
-//                .filter(integer -> {
-//                    return integer % 2 != 0;
-//                });
-//
-//        Observer<Integer> observer = new Observer<Integer>() {
-//            @Override
-//            public void onError(Throwable e) {
-//                Log.e("RXJAVA","Error received: " + e.getMessage());
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//                Log.e("RXJAVA","All data emitted.");
-//            }
-//
-//            @Override
-//            public void onSubscribe(Disposable d) {
-//
-//            }
-//
-//            @Override
-//            public void onNext(Integer integer) {
-//                Log.e("RXJAVA","New data received: " + integer);
-//            }
-//        };
-//        observable.subscribeOn(Schedulers.io())       //observable will run on IO thread.
-//                .observeOn(AndroidSchedulers.mainThread())      //Observer will run on main thread.
-//                .subscribe(observer);
     }
 
     private List<String> fetchList() {
